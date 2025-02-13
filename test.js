@@ -185,5 +185,12 @@ function larger(){
 
 }
 
+function external(){
+
+    alert("congrats You are linked to external javascript")
+}
 
 
+
+const fruits = ["Banana", "Orange", "Apple", "Mango"];
+document.getElementById("demo").innerHTML = fruits.toString();
