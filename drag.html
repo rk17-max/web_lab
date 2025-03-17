@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag and Drop Box</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    width: 80%;
+    max-width: 800px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 30px;
+}
+
+.small-boxes {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.draggable-box {
+    background-color: #3498db;
+    color: white;
+    padding: 20px;
+    width: 150px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: grab;
+    transition: transform 0.2s ease-in-out;
+}
+
+.draggable-box:active {
+    cursor: grabbing;
+}
+
+.drop-box {
+    width: 100%;
+    height: 400px;
+    border: 2px dashed #3498db;
+    background-color: #ffffff;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #3498db;
+    font-size: 18px;
+    text-align: center;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.drop-box.drag-over {
+    background-color: #eaf2f7;
+    border-color: #1d78b1;
+}
+
+.dropped-box {
+    background-color: #f0f8ff;
+    width: 150px;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    color: #3498db;
+    margin: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="small-boxes">
+            <div class="draggable-box" id="box1" draggable="true">
+                <p>Box 1</p>
+            </div>
+            <div class="draggable-box" id="box2" draggable="true">
+                <p>Box 2</p>
+            </div>
+            <div class="draggable-box" id="box3" draggable="true">
+                <p>Box 3</p>
+            </div>
+            <div class="draggable-box" id="box4" draggable="true">
+                <p>Box 4</p>
+            </div>
+        </div>
+
+        <div class="drop-box" id="dropBox">
+            <p>Drop Your Boxes Here</p>
+        </div>
+    </div>
+
+   <script>
+    // Get all draggable boxes
+const draggableBoxes = document.querySelectorAll('.draggable-box');
+const dropBox = document.getElementById('dropBox');
+
+// Add event listeners to the draggable boxes
+draggableBoxes.forEach((box) => {
+    box.addEventListener('dragstart', (e) => {
+        e.dataTransfer.setData('text', e.target.id);
+    });
+});
+
+// Add event listeners to the drop box
+dropBox.addEventListener('dragover', (e) => {
+    e.preventDefault(); // Allow drop
+    dropBox.classList.add('drag-over');
+});
+
+dropBox.addEventListener('dragleave', () => {
+    dropBox.classList.remove('drag-over');
+});
+
+dropBox.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropBox.classList.remove('drag-over');
+
+    // Get the ID of the dragged box
+    const draggedBoxId = e.dataTransfer.getData('text');
+    const draggedBox = document.getElementById(draggedBoxId);
+
+    // Clone the dragged box and add it to the drop box
+    const clonedBox = draggedBox.cloneNode(true);
+    clonedBox.classList.add('dropped-box');
+    
+    // Remove the draggable attribute of the dropped box
+    clonedBox.removeAttribute('draggable');
+    
+    dropBox.appendChild(clonedBox);
+});
+
+   </script>
+</body>
+</html>
